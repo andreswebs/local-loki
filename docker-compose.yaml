@@ -1,5 +1,5 @@
 ---
-version: "3"
+version: '3'
  
 networks:
   loki:
@@ -7,23 +7,38 @@ networks:
 services:
   loki:
     image: grafana/loki
+    volumes:
+      - ./config/loki.config.yaml:/etc/loki/loki.config.yaml
+      - ./loki-rules:/loki/rules
     ports:
       - 3100:3100
+    command: -config.file=/etc/loki/loki.config.yaml  
     networks:
       - loki
  
   promtail:
     image: grafana/promtail
     volumes:
-      - ./promtail.yaml:/etc/promtail/config.yaml
+      - ./config/promtail.config.yaml:/etc/promtail/promtail.config.yaml
       - ./logs:/logs
-    command: -config.file=/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/promtail.config.yaml
     networks:
       - loki
- 
+
   grafana:
     image: grafana/grafana
     ports:
       - 3000:3000
     networks:
       - loki
+ 
+  ## Example Alert Manager:
+  # alertmanager:
+  #   image: prom/alertmanager
+  #   ports:
+  #     - 9093:9093
+  #   volumes:
+  #     - ./config/alertmanager.config.yaml:/etc/alertmanager/alertmanager.config.yaml
+  #   command: -config.file=/etc/alertmanager/alertmanager.config.yaml --log.level=debug
+  #   networks:
+  #     - loki
