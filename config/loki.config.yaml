@@ -37,6 +37,7 @@ schema_config:
 ruler:
   alertmanager_url: http://alertmanager:9093
   enable_alertmanager_v2: true
+  enable_api: true
   rule_path: /loki/scratch
   storage:
     type: local

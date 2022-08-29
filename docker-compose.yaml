@@ -32,13 +32,24 @@ services:
     networks:
       - loki
  
-  ## Example Alert Manager:
-  # alertmanager:
-  #   image: prom/alertmanager
-  #   ports:
-  #     - 9093:9093
-  #   volumes:
-  #     - ./config/alertmanager.config.yaml:/etc/alertmanager/alertmanager.config.yaml
-  #   command: -config.file=/etc/alertmanager/alertmanager.config.yaml --log.level=debug
-  #   networks:
-  #     - loki
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - ./config/alertmanager.config.yaml:/etc/alertmanager/alertmanager.config.yaml
+    command: --config.file=/etc/alertmanager/alertmanager.config.yaml
+    networks:
+      - loki
+ 
+  # Test webhook for alertmanager:
+  webhook:
+    image: alpine
+    ports:
+      - 8080:8080
+    entrypoint: /bin/sh
+    command: 
+      - -c
+      - nc -l -p 8080
+    networks:
+      - loki
