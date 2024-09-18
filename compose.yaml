@@ -1,9 +1,7 @@
 ---
-version: '3'
- 
 networks:
   loki:
- 
+
 services:
   loki:
     image: grafana/loki
@@ -12,10 +10,10 @@ services:
       - ./loki-rules:/loki/rules
     ports:
       - 3100:3100
-    command: -config.file=/etc/loki/loki.config.yaml  
+    command: -config.file=/etc/loki/loki.config.yaml
     networks:
       - loki
- 
+
   promtail:
     image: grafana/promtail
     volumes:
@@ -31,7 +29,7 @@ services:
       - 3000:3000
     networks:
       - loki
- 
+
   alertmanager:
     image: prom/alertmanager
     ports:
@@ -41,14 +39,14 @@ services:
     command: --config.file=/etc/alertmanager/alertmanager.config.yaml
     networks:
       - loki
- 
+
   # Test webhook for alertmanager:
   webhook:
     image: alpine
     ports:
       - 8080:8080
     entrypoint: /bin/sh
-    command: 
+    command:
       - -c
       - nc -l -p 8080
     networks:
