@@ -1,2 +1,3 @@
 logs/
 loki-rules/
+.DS_Store
